@@ -10,6 +10,7 @@ interface PetProps {
 
 const Pet = ({ mood, health, riskLevel }: PetProps) => {
   const [animation, setAnimation] = useState('');
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   
   useEffect(() => {
     // Set animation based on mood
@@ -21,6 +22,40 @@ const Pet = ({ mood, health, riskLevel }: PetProps) => {
       setAnimation('');
     }
   }, [mood]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      // Get the container element's position and size (the pet's parent container)
+      const container = document.querySelector('.pet-container');
+      if (!container) return;
+      
+      const rect = container.getBoundingClientRect();
+      
+      // Calculate the maximum distance the pet can move
+      const maxMovementX = 20;
+      const maxMovementY = 10;
+      
+      // Calculate normalized mouse position within the container
+      let normalizedX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      let normalizedY = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+      
+      // Limit the range to -1 to 1
+      normalizedX = Math.max(-1, Math.min(1, normalizedX));
+      normalizedY = Math.max(-1, Math.min(1, normalizedY));
+      
+      // Calculate the movement offset
+      const offsetX = normalizedX * maxMovementX;
+      const offsetY = normalizedY * maxMovementY;
+      
+      setPosition({ x: offsetX, y: offsetY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
   const getEyeStyle = () => {
     switch (mood) {
@@ -58,8 +93,14 @@ const Pet = ({ mood, health, riskLevel }: PetProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center space-y-4">
-      <div className={`relative ${animation}`}>
+    <div className="flex flex-col items-center space-y-4 pet-container">
+      <div 
+        className={`relative ${animation}`}
+        style={{
+          transform: `translate(${position.x}px, ${position.y}px)`,
+          transition: 'transform 0.3s ease-out'
+        }}
+      >
         <div 
           className={`w-32 h-32 rounded-full ${getPetColorClass()} shadow-lg flex items-center justify-center relative pixel-border animate-pulse-glow`}
         >
