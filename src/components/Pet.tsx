@@ -114,14 +114,14 @@ const Pet = ({ mood, health, riskLevel }: PetProps) => {
         </div>
       </div>
 
-      <div className="w-full bg-gray-200 rounded-full h-2.5">
+      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
         <div 
           className={`h-2.5 rounded-full ${health > 70 ? 'bg-green-500' : health > 30 ? 'bg-yellow-400' : 'bg-red-500'}`}
           style={{ width: `${health}%` }}
         ></div>
       </div>
       <div className="text-center">
-        <p className="text-xs text-gray-500">Health: {health}%</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">Health: {health}%</p>
         <p className="text-sm font-medium pixel-text">{mood.toUpperCase()} CRYPTO PET</p>
       </div>
     </div>
