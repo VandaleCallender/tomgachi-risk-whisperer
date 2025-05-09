@@ -54,8 +54,7 @@ const RiskMeter = ({ riskScore, riskLevel }: RiskMeterProps) => {
       <div className="flex items-center gap-2">
         <Progress
           value={progress}
-          className="h-3"
-          indicatorClassName={getColorClass()}
+          className={`h-3 ${getColorClass()}`}
         />
         <span className="text-sm font-semibold w-8">{riskScore}%</span>
       </div>
