@@ -54,15 +54,15 @@ const RiskMeter = ({ riskScore, riskLevel }: RiskMeterProps) => {
       <div className="flex items-center gap-2">
         <Progress
           value={progress}
-          className={`h-3 ${getColorClass()}`}
+          className={`h-3 ${getColorClass()} rounded-none`}
         />
-        <span className="text-sm font-semibold w-8">{riskScore}%</span>
+        <span className="text-sm font-semibold w-8 pixel-text">{riskScore}%</span>
       </div>
       
-      <Alert className={`mt-4 border ${riskLevel === "high" ? "border-crypto-high-risk" : "border-crypto-primary"}`}>
+      <Alert className={`mt-4 border-2 rounded-none pixel-border ${riskLevel === "high" ? "border-crypto-high-risk" : "border-crypto-primary"}`}>
         <div className="flex items-center gap-2">
           {getIcon()}
-          <AlertDescription>
+          <AlertDescription className="pixel-text">
             {getMessage()}
           </AlertDescription>
         </div>

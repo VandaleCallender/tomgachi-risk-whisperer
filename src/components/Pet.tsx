@@ -59,147 +59,96 @@ const Pet = ({ mood, health, riskLevel }: PetProps) => {
     };
   }, []);
 
-  const getEyeStyle = (type: 'left' | 'right') => {
-    const baseStyle = {
-      transform: `translate(${eyePosition[type].x}px, ${eyePosition[type].y}px)`,
-      transition: 'transform 0.2s ease-out'
-    };
-
-    switch (mood) {
-      case "happy":
-        return { ...baseStyle, borderRadius: '50% 50% 0 0', height: '4px', width: '4px' };
-      case "sad":
-        return { ...baseStyle, borderRadius: '0 0 50% 50%', height: '4px', width: '4px' };
-      default:
-        return { ...baseStyle, borderRadius: '50%', height: '5px', width: '5px' };
-    }
-  };
-
-  const getMouthPath = () => {
-    // Scale the mouth based on health
-    const width = 24;
-    const height = 12;
-    
-    switch (mood) {
-      case "happy":
-        // Smile - bigger when health is higher
-        return (
-          <path 
-            d={`M10 ${8 + (100 - health) * 0.05} Q${width/2} ${height + 6} ${width - 10} ${8 + (100 - health) * 0.05}`}
-            stroke="black"
-            strokeWidth="2"
-            fill="none"
-          />
-        );
-      case "sad":
-        // Frown - deeper when health is lower
-        return (
-          <path 
-            d={`M10 ${12 - (health) * 0.05} Q${width/2} ${4 - (health) * 0.05} ${width - 10} ${12 - (health) * 0.05}`}
-            stroke="black"
-            strokeWidth="2"
-            fill="none"
-          />
-        );
-      default:
-        // Neutral
-        return (
-          <line 
-            x1="10" 
-            y1="10" 
-            x2={width - 10} 
-            y2="10" 
-            stroke="black" 
-            strokeWidth="2"
-          />
-        );
-    }
-  };
-
-  const getOctopusColor = () => {
+  const getPetColor = () => {
     switch (riskLevel) {
       case "low":
-        return "bg-gradient-to-br from-purple-300 to-purple-500";
+        return "bg-purple-300 dark:bg-purple-500";
       case "medium":
-        return "bg-gradient-to-br from-amber-300 to-amber-500";
+        return "bg-amber-300 dark:bg-amber-500";
       case "high":
-        return "bg-gradient-to-br from-red-300 to-red-500";
+        return "bg-red-300 dark:bg-red-500";
       default:
-        return "bg-gradient-to-br from-purple-300 to-purple-500";
+        return "bg-purple-300 dark:bg-purple-500";
     }
   };
 
-  // Generate tentacles
-  const renderTentacles = () => {
-    const tentacles = [];
-    const tentacleCount = 8;
-    const baseDelay = 0.2;
-    
-    for (let i = 0; i < tentacleCount; i++) {
-      const angle = (i / tentacleCount) * 2 * Math.PI;
-      const x = Math.cos(angle);
-      const y = Math.sin(angle);
-      const delay = baseDelay * i;
-      
-      tentacles.push(
-        <div 
-          key={i}
-          className={`absolute w-6 h-12 rounded-full ${getOctopusColor()} opacity-90`}
-          style={{ 
-            transform: `translate(${x * 16}px, ${y * 16 + 40}px) rotate(${angle + Math.PI/2}rad)`,
-            animation: `${i % 2 === 0 ? 'sway-left' : 'sway-right'} ${2 + i * 0.2}s infinite ease-in-out`,
-            animationDelay: `${delay}s`,
-            boxShadow: 'inset 0 -8px 10px rgba(0,0,0,0.2)',
-          }}
-        ></div>
+  const getBorderColor = () => {
+    switch (riskLevel) {
+      case "low":
+        return "border-purple-900 dark:border-purple-300";
+      case "medium":
+        return "border-amber-900 dark:border-amber-300";
+      case "high":
+        return "border-red-900 dark:border-red-300";
+      default:
+        return "border-purple-900 dark:border-purple-300";
+    }
+  };
+
+  const getEyeExpression = () => {
+    if (mood === "happy") {
+      return (
+        <>
+          <div className="absolute w-3 h-3 bg-black top-8 left-7" />
+          <div className="absolute top-8 right-7 flex flex-col">
+            <div className="w-3 h-1 bg-black" />
+            <div className="w-1 h-1 bg-black ml-2" />
+            <div className="w-3 h-1 bg-black" />
+          </div>
+        </>
+      );
+    } else if (mood === "sad") {
+      return (
+        <>
+          <div className="absolute flex flex-col top-8 left-7">
+            <div className="w-3 h-1 bg-black" />
+            <div className="w-1 h-1 bg-black ml-2" />
+            <div className="w-3 h-1 bg-black" />
+          </div>
+          <div className="absolute w-3 h-3 bg-black top-8 right-7" />
+        </>
+      );
+    } else {
+      return (
+        <>
+          <div className="absolute w-3 h-3 bg-black top-8 left-7" />
+          <div className="absolute w-3 h-3 bg-black top-8 right-7" />
+        </>
       );
     }
-    
-    return tentacles;
+  };
+
+  const getMouthExpression = () => {
+    if (mood === "happy") {
+      return (
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-10 h-2 bg-black rounded-b-sm" />
+      );
+    } else if (mood === "sad") {
+      return (
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-10 h-2 bg-black rounded-t-sm" />
+      );
+    } else {
+      return (
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-8 h-2 bg-black" />
+      );
+    }
   };
 
   return (
     <div className="flex flex-col items-center space-y-4 pet-container">
       <div className={`relative ${animation}`}>
-        {/* Tentacles */}
-        {renderTentacles()}
-        
-        {/* Main body */}
+        {/* Pixel art octopus */}
         <div 
-          className={`w-32 h-32 rounded-full ${getOctopusColor()} shadow-lg flex items-center justify-center relative
-            border-4 border-opacity-20 border-white dark:border-gray-800
-            shadow-[0_0_15px_rgba(0,0,0,0.2)]`}
+          className={`relative w-32 h-32 ${getPetColor()} border-4 ${getBorderColor()} pixel-border`}
           style={{
-            boxShadow: 'inset 0 -15px 30px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.3)',
-            transform: 'translateY(5px)',
+            clipPath: 'polygon(0% 0%, 100% 0%, 100% 75%, 87% 75%, 87% 87%, 75% 87%, 75% 75%, 62% 75%, 62% 87%, 50% 87%, 50% 75%, 37% 75%, 37% 87%, 25% 87%, 25% 75%, 12% 75%, 12% 87%, 0% 87%)',
           }}
         >
-          {/* Left eye socket */}
-          <div className="absolute top-10 left-8 bg-white w-8 h-8 rounded-full flex items-center justify-center
-            shadow-inner border-2 border-gray-200 dark:border-gray-600">
-            {/* Left eye pupil */}
-            <div 
-              className="bg-black w-5 h-5 rounded-full"
-              style={getEyeStyle('left')}
-            ></div>
-          </div>
-
-          {/* Right eye socket */}
-          <div className="absolute top-10 right-8 bg-white w-8 h-8 rounded-full flex items-center justify-center
-            shadow-inner border-2 border-gray-200 dark:border-gray-600">
-            {/* Right eye pupil */}
-            <div 
-              className="bg-black w-5 h-5 rounded-full"
-              style={getEyeStyle('right')}
-            ></div>
-          </div>
-
+          {/* Eyes that track mouse movement */}
+          {getEyeExpression()}
+          
           {/* Mouth */}
-          <div className="absolute bottom-12 w-full flex justify-center">
-            <svg width="30" height="20" viewBox="0 0 30 20">
-              {getMouthPath()}
-            </svg>
-          </div>
+          {getMouthExpression()}
         </div>
       </div>
 

@@ -91,11 +91,62 @@
 }
 
 .pixel-border {
-  box-shadow: 
-    0 -4px 0 0 rgba(0, 0, 0, 0.2),
-    0 4px 0 0 rgba(0, 0, 0, 0.2),
-    -4px 0 0 0 rgba(0, 0, 0, 0.2),
-    4px 0 0 0 rgba(0, 0, 0, 0.2),
-    0 0 0 4px rgba(0, 0, 0, 0.2);
   image-rendering: pixelated;
+  box-shadow: 
+    2px 0 0 0 #000,
+    0 2px 0 0 #000,
+    2px 2px 0 0 #000,
+    -2px 0 0 0 #000,
+    0 -2px 0 0 #000;
+}
+
+@keyframes bounce-slow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes wiggle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(2deg);
+  }
+  75% {
+    transform: rotate(-2deg);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 3s infinite;
+}
+
+.animate-wiggle {
+  animation: wiggle 2s infinite;
+}
+
+/* Common classes for pixelated elements */
+.pixelated {
+  image-rendering: pixelated;
+}
+
+/* Pixelated button style */
+.btn-pixel {
+  @apply border-2 border-black dark:border-white rounded-none px-4 py-2 pixel-text;
+  box-shadow: 4px 4px 0 0 #000;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn-pixel:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 #000;
+}
+
+.btn-pixel:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 0 #000;
 }
