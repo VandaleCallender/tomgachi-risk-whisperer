@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,16 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				crypto: {
+					'primary': '#9b87f5',
+					'secondary': '#7E69AB',
+					'tertiary': '#6E59A5',
+					'dark': '#1A1F2C',
+					'light': '#D6BCFA',
+					'high-risk': '#F97316',
+					'medium-risk': '#FEC6A1',
+					'low-risk': '#0EA5E9',
 				}
 			},
 			borderRadius: {
@@ -70,25 +81,42 @@ export default {
 			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' }
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' }
+				},
+				'bounce': {
+					'0%, 100%': { 
+						transform: 'translateY(0)',
 					},
-					to: {
-						height: '0'
-					}
-				}
+					'50%': {
+						transform: 'translateY(-10px)',
+					},
+				},
+				'wiggle': {
+					'0%, 100%': { transform: 'rotate(-3deg)' },
+					'50%': { transform: 'rotate(3deg)' },
+				},
+				'pulse-glow': {
+					'0%, 100%': { 
+						opacity: '1',
+						boxShadow: '0 0 5px 2px rgba(155, 135, 245, 0.7)',
+					},
+					'50%': { 
+						opacity: '0.8',
+						boxShadow: '0 0 15px 5px rgba(155, 135, 245, 0.9)',
+					},
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'bounce-slow': 'bounce 3s infinite',
+				'wiggle': 'wiggle 1s ease-in-out infinite',
+				'pulse-glow': 'pulse-glow 2s infinite',
 			}
 		}
 	},
